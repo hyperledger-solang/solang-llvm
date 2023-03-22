@@ -40,4 +40,4 @@ ENV PATH="/llvm15.0/bin:/root/.cargo/bin:/root/.local/share/solana/install/activ
 RUN if test `arch` = x86_64; then sh -c "$(curl -sSfL https://release.solana.com/v1.11.10/install)"; fi
 
 # Install Anchor tools
-RUN cargo install --git https://github.com/coral-xyz/anchor --tag v0.25.0 anchor-cli
+RUN cargo install --git https://github.com/coral-xyz/anchor --tag v0.27.0 anchor-cli
