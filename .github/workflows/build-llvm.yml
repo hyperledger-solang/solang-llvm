@@ -3,7 +3,7 @@ on:
     tags:
     - 'llvm*'
 
-name: Build Release Binaries
+name: Build LLVM Binaries
 
 jobs:
   linux-x86-64:
