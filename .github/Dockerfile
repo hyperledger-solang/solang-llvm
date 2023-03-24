@@ -19,7 +19,8 @@ RUN cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off \
     -DLLVM_ENABLE_ZSTD=Off \
     -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/llvm15.0 llvm
 
-RUN cmake --build . --target install
+RUN cmake --build . --target install && \
+	find /llvm15.0/ -type f -executable -exec sh -c "file '{}' | grep -q 'not stripped' " \; -print | xargs strip
 
 FROM ubuntu:20.04
 
@@ -30,14 +31,14 @@ RUN apt-get clean
 RUN apt-get autoclean
 
 # Get Rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.65.0
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.65.0 --profile minimal
 
 COPY --from=builder /llvm15.0 /llvm15.0/
 
 ENV PATH="/llvm15.0/bin:/root/.cargo/bin:/root/.local/share/solana/install/active_release/bin:${PATH}"
 
 # Install Solana (x86-64 only, does not work on arm)
-RUN if test `arch` = x86_64; then sh -c "$(curl -sSfL https://release.solana.com/v1.11.10/install)"; fi
-
-# Install Anchor tools
-RUN cargo install --git https://github.com/coral-xyz/anchor --tag v0.27.0 anchor-cli
+RUN if test `arch` = x86_64; then sh -c "$(curl -sSfL https://release.solana.com/v1.14.16/install)"; fi && \
+	cargo install --git https://github.com/coral-xyz/anchor --tag v0.27.0 anchor-cli && \
+	rm -rf /root/.cargo/registry && \
+	find /root/.local/share/solana/install/releases/1.11.10/solana-release/bin/ -type f -executable -exec sh -c "file '{}' | grep -q 'not stripped' " \; -print | xargs strip
