@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
       with:
         submodules: recursive
     - run: git clone --depth 1 --branch solana-rustc/15.0-2022-08-09 https://github.com/solana-labs/llvm-project.git
@@ -41,7 +41,7 @@ jobs:
     if: ${{ github.repository_owner == 'hyperledger' }}
     steps:
     - name: Checkout sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
       with:
         submodules: recursive
     - run: git clone --depth 1 --branch solana-rustc/15.0-2022-08-09 https://github.com/solana-labs/llvm-project.git
@@ -68,7 +68,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
       with:
         submodules: recursive
     - uses: dtolnay/rust-toolchain@1.64.0
