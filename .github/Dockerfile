@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as builder
+FROM ubuntu:20.04 as builder
 
 LABEL org.opencontainers.image.licenses="Apache-2.0" \
     org.opencontainers.image.description="CI container for Hyperledger Solang github actions"
@@ -22,7 +22,7 @@ RUN cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off \
 RUN cmake --build . --target install && \
 	find /llvm15.0/ -type f -executable -exec sh -c "file '{}' | grep -q 'not stripped' " \; -print | xargs strip
 
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
