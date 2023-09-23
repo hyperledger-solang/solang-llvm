@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.licenses="Apache-2.0" \
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && \
 	apt-get upgrade -y && \
-	apt-get install -y libz-dev libudev-dev pkg-config libssl-dev git cmake ninja-build gcc g++ python3 file
+	apt-get install -y libz-dev pkg-config libssl-dev git cmake ninja-build gcc g++ python3 file
 
 RUN git clone --single-branch --branch solana-rustc/15.0-2022-08-09 \
     https://github.com/solana-labs/llvm-project.git
@@ -26,7 +26,7 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-	apt-get install -y zlib1g-dev pkg-config libssl-dev git libffi-dev curl gcc g++ make python3 file && \
+	apt-get install -y zlib1g-dev libudev-dev pkg-config libssl-dev git libffi-dev curl gcc g++ make python3 file && \
 	apt-get clean && \
 	apt-get autoclean
 
