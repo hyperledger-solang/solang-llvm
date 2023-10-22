@@ -8,7 +8,7 @@ RUN apt-get update -y && \
 	apt-get upgrade -y && \
 	apt-get install -y libz-dev pkg-config libssl-dev git cmake ninja-build gcc g++ python3 file
 
-RUN git clone --single-branch --branch solana-rustc/15.0-2022-08-09 \
+RUN git clone --single-branch --branch solana-rustc/15.0-2022-12-07 \
     https://github.com/solana-labs/llvm-project.git
 
 WORKDIR /llvm-project
