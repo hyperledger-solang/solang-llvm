@@ -31,7 +31,7 @@ RUN apt-get update && \
 	apt-get autoclean
 
 # Get Rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.70.0 --profile minimal
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.72.0 --profile minimal
 
 COPY --from=builder /llvm15.0 /llvm15.0/
 
@@ -43,5 +43,5 @@ RUN if test `arch` = x86_64; then \
 		find /root/.local/share/solana/install/releases/1.16.1/solana-release/bin/ -type f -executable -exec sh -c "file '{}' | grep -q 'not stripped' " \; -print | xargs strip; \
 		rm /root/.local/share/solana/install/active_release/bin/solang; \
 	fi && \
-	cargo install --git https://github.com/coral-xyz/anchor --tag v0.28.0 anchor-cli && \
+	cargo install --git https://github.com/coral-xyz/anchor --tag v0.29.0 anchor-cli && \
 	rm -rf /root/.cargo/registry
