@@ -6,6 +6,27 @@ on:
 name: Build LLVM Binaries
 
 jobs:
+  rv32e-linux-x86-64:
+    name: rv32e Linux x86-64
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - run: git clone --depth 1 --branch release/16.x https://github.com/llvm/llvm-project.git
+    - name: Install Ninja
+      uses: llvm/actions/install-ninja@main
+    - run: build-rv32e.sh
+    - run: tar Jcf ./llvm16.0-linux-x86-64.tar.xz ./llvm16.0/
+    - name: Upload llvm
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: llvm16.0-linux-x86-64.tar.xz
+        asset_name: llvm16.0-linux-x86-64.tar.xz
+        tag: ${{ github.ref }}
+
   linux-x86-64:
     name: Linux x86-64
     runs-on: ubuntu-20.04
