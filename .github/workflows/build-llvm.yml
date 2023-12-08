@@ -14,25 +14,26 @@ jobs:
       uses: actions/checkout@v3.1.0
       with:
         submodules: recursive
-    - run: git clone --depth 1 --branch solana-rustc/15.0-2022-12-07 https://github.com/solana-labs/llvm-project.git
+    - run: git clone --depth 1 --branch solana-rustc/16.0-2023-06-05 https://github.com/solana-labs/llvm-project.git
     - name: Install Ninja
       uses: llvm/actions/install-ninja@main
     - run: cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off
         -DLLVM_ENABLE_LIBXML2=Off -DLLVM_ENABLE_ZLIB=Off
         -DLLVM_ENABLE_PROJECTS='clang;lld'
-        -DLLVM_TARGETS_TO_BUILD='WebAssembly;SBF'
+        -DLLVM_TARGETS_TO_BUILD='WebAssembly'
+        -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=SBF
         -DLLVM_ENABLE_ZSTD=Off
-        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm15.0 llvm
+        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm16.0 llvm
       working-directory: ./llvm-project/
     - run: cmake --build . --target install
       working-directory: ./llvm-project/
-    - run: tar Jcf ./llvm15.0-linux-x86-64.tar.xz ./llvm15.0/
+    - run: tar Jcf ./llvm16.0-linux-x86-64.tar.xz ./llvm16.0/
     - name: Upload llvm
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: llvm15.0-linux-x86-64.tar.xz
-        asset_name: llvm15.0-linux-x86-64.tar.xz
+        file: llvm16.0-linux-x86-64.tar.xz
+        asset_name: llvm16.0-linux-x86-64.tar.xz
         tag: ${{ github.ref }}
 
   linux-arm64:
@@ -44,23 +45,24 @@ jobs:
       uses: actions/checkout@v3.1.0
       with:
         submodules: recursive
-    - run: git clone --depth 1 --branch solana-rustc/15.0-2022-12-07 https://github.com/solana-labs/llvm-project.git
+    - run: git clone --depth 1 --branch solana-rustc/16.0-2023-06-05 https://github.com/solana-labs/llvm-project.git
     - run: cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off
         -DLLVM_ENABLE_LIBXML2=Off -DLLVM_ENABLE_ZLIB=Off
         -DLLVM_ENABLE_PROJECTS='clang;lld'
-        -DLLVM_TARGETS_TO_BUILD='WebAssembly;SBF'
+        -DLLVM_TARGETS_TO_BUILD='WebAssembly'
+        -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=SBF
         -DLLVM_ENABLE_ZSTD=Off
-        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm15.0 llvm
+        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm16.0 llvm
       working-directory: ./llvm-project/
     - run: cmake --build . --target install
       working-directory: ./llvm-project/
-    - run: tar Jcf ./llvm15.0-linux-arm64.tar.xz ./llvm15.0/
+    - run: tar Jcf ./llvm16.0-linux-arm64.tar.xz ./llvm16.0/
     - name: Upload llvm
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: llvm15.0-linux-arm64.tar.xz
-        asset_name: llvm15.0-linux-arm64.tar.xz
+        file: llvm16.0-linux-arm64.tar.xz
+        asset_name: llvm16.0-linux-arm64.tar.xz
         tag: ${{ github.ref }}
 
   windows:
@@ -72,7 +74,7 @@ jobs:
       with:
         submodules: recursive
     - uses: dtolnay/rust-toolchain@1.64.0
-    - run: git clone --depth 1 --branch solana-rustc/15.0-2022-12-07 https://github.com/solana-labs/llvm-project.git
+    - run: git clone --depth 1 --branch solana-rustc/16.0-2023-06-05 https://github.com/solana-labs/llvm-project.git
       # We may not have enough space to compile llvm, see https://github.com/actions/virtual-environments/issues/326
       working-directory: C:\
     - name: Setup Windows
@@ -85,17 +87,17 @@ jobs:
         -DLLVM_ENABLE_LIBXML2=Off -DLLVM_ENABLE_ZLIB=Off
         -DLLVM_ENABLE_PROJECTS='clang;lld'
         -DLLVM_ENABLE_ZSTD=Off
-        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=C:/llvm15.0 llvm
+        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=C:/llvm16.0 llvm
       working-directory: C:\llvm-project
     - run: cmake --build . --target install
       working-directory: C:\llvm-project
-    - run: Compress-Archive -Path C:\llvm15.0 -DestinationPath C:\llvm15.0-win.zip
+    - run: Compress-Archive -Path C:\llvm16.0 -DestinationPath C:\llvm16.0-win.zip
     - name: Upload llvm
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: C:\llvm15.0-win.zip
-        asset_name: llvm15.0-win.zip
+        file: C:\llvm16.0-win.zip
+        asset_name: llvm16.0-win.zip
         tag: ${{ github.ref }}
 
   mac-arm:
@@ -107,25 +109,26 @@ jobs:
       with:
         submodules: recursive
     - uses: dtolnay/rust-toolchain@1.64.0
-    - run: git clone --depth 1 --branch solana-rustc/15.0-2022-12-07 https://github.com/solana-labs/llvm-project.git
+    - run: git clone --depth 1 --branch solana-rustc/16.0-2023-06-05 https://github.com/solana-labs/llvm-project.git
     - name: Install Ninja
       uses: llvm/actions/install-ninja@main
     - run: cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off
         -DLLVM_ENABLE_LIBXML2=Off -DLLVM_ENABLE_ZLIB=Off
         -DLLVM_ENABLE_PROJECTS='clang;lld'
-        -DLLVM_TARGETS_TO_BUILD='WebAssembly;SBF'
+        -DLLVM_TARGETS_TO_BUILD='WebAssembly'
+        -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=SBF
         -DLLVM_ENABLE_ZSTD=Off
-        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm15.0 llvm
+        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm16.0 llvm
       working-directory: ./llvm-project/
     - run: cmake --build . --target install
       working-directory: ./llvm-project/
-    - run: tar Jcf ./llvm15.0-mac-arm.tar.xz ./llvm15.0/
+    - run: tar Jcf ./llvm16.0-mac-arm.tar.xz ./llvm16.0/
     - name: Upload llvm
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: llvm15.0-mac-arm.tar.xz
-        asset_name: llvm15.0-mac-arm.tar.xz
+        file: llvm16.0-mac-arm.tar.xz
+        asset_name: llvm16.0-mac-arm.tar.xz
         tag: ${{ github.ref }}
 
   mac-intel:
@@ -140,23 +143,24 @@ jobs:
       with:
         submodules: recursive
     - uses: dtolnay/rust-toolchain@1.64.0
-    - run: git clone --depth 1 --branch solana-rustc/15.0-2022-12-07 https://github.com/solana-labs/llvm-project.git
+    - run: git clone --depth 1 --branch solana-rustc/16.0-2023-06-05 https://github.com/solana-labs/llvm-project.git
     - name: Install Ninja
       uses: llvm/actions/install-ninja@main
     - run: cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off
         -DLLVM_ENABLE_LIBXML2=Off -DLLVM_ENABLE_ZLIB=Off
         -DLLVM_ENABLE_PROJECTS='clang;lld'
-        -DLLVM_TARGETS_TO_BUILD='WebAssembly;SBF'
+        -DLLVM_TARGETS_TO_BUILD='WebAssembly'
+        -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=SBF
         -DLLVM_ENABLE_ZSTD=Off
-        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm15.0 llvm
+        -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../llvm16.0 llvm
       working-directory: ./llvm-project/
     - run: cmake --build . --target install
       working-directory: ./llvm-project/
-    - run: tar Jcf ./llvm15.0-mac-intel.tar.xz ./llvm15.0/
+    - run: tar Jcf ./llvm16.0-mac-intel.tar.xz ./llvm16.0/
     - name: Upload llvm
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: llvm15.0-mac-intel.tar.xz
-        asset_name: llvm15.0-mac-intel.tar.xz
+        file: llvm16.0-mac-intel.tar.xz
+        asset_name: llvm16.0-mac-intel.tar.xz
         tag: ${{ github.ref }}

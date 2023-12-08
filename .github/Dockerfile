@@ -8,19 +8,20 @@ RUN apt-get update -y && \
 	apt-get upgrade -y && \
 	apt-get install -y libz-dev pkg-config libssl-dev git cmake ninja-build gcc g++ python3 file
 
-RUN git clone --single-branch --branch solana-rustc/15.0-2022-12-07 \
+RUN git clone --single-branch --branch solana-rustc/16.0-2023-06-05 \
     https://github.com/solana-labs/llvm-project.git
 
 WORKDIR /llvm-project
 
 RUN cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off \
     -DLLVM_ENABLE_PROJECTS=clang\;lld \
-    -DLLVM_TARGETS_TO_BUILD=WebAssembly\;SBF \
+    -DLLVM_TARGETS_TO_BUILD=WebAssembly \
+	-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=SBF \
     -DLLVM_ENABLE_ZSTD=Off \
-    -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/llvm15.0 llvm
+    -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/llvm16.0 llvm
 
 RUN cmake --build . --target install && \
-	find /llvm15.0/ -type f -executable -exec sh -c "file '{}' | grep -q 'not stripped' " \; -print | xargs strip
+	find /llvm16.0/ -type f -executable -exec sh -c "file '{}' | grep -q 'not stripped' " \; -print | xargs strip
 
 FROM ubuntu:20.04
 
@@ -33,9 +34,9 @@ RUN apt-get update && \
 # Get Rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.72.0 --profile minimal
 
-COPY --from=builder /llvm15.0 /llvm15.0/
+COPY --from=builder /llvm16.0 /llvm16.0/
 
-ENV PATH="/llvm15.0/bin:/root/.cargo/bin:/root/.local/share/solana/install/active_release/bin:${PATH}"
+ENV PATH="/llvm16.0/bin:/root/.cargo/bin:/root/.local/share/solana/install/active_release/bin:${PATH}"
 
 # Install Solana (x86-64 only, does not work on arm)
 RUN if test `arch` = x86_64; then \
