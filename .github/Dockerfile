@@ -32,7 +32,7 @@ RUN apt-get update && \
 	apt-get autoclean
 
 # Get Rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.72.0 --profile minimal
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain 1.74.0 --profile minimal
 
 COPY --from=builder /llvm16.0 /llvm16.0/
 
