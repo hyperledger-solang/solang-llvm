@@ -2,7 +2,7 @@ name: Build and push ci image
 on: [workflow_dispatch]
 jobs:
   build-push-ci-image:
-    runs-on: linux-arm64
+    runs-on: solang-arm
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3.1.0
