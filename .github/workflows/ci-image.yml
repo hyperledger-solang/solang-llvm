@@ -2,10 +2,10 @@ name: Build and push ci image
 on: [workflow_dispatch]
 jobs:
   build-push-ci-image:
-    runs-on: linux-arm64
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3.1.0
       - run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          docker buildx build --provenance=false --platform linux/amd64,linux/arm64 -t ghcr.io/${GITHUB_REPOSITORY}:ci-7 --push .github
+          docker buildx build --provenance=false -t ghcr.io/${GITHUB_REPOSITORY}:ci-7 --push .github

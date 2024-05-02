@@ -38,13 +38,17 @@ jobs:
 
   linux-arm64:
     name: Linux arm64
-    runs-on: linux-arm64
+    runs-on: solang-arm
     if: ${{ github.repository_owner == 'hyperledger' }}
     steps:
     - name: Checkout sources
       uses: actions/checkout@v3.1.0
       with:
         submodules: recursive
+    - name: Basic build tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libz-dev pkg-config libssl-dev git cmake ninja-build gcc g++ python3 file
     - run: git clone --depth 1 --branch solana-rustc/16.0-2023-06-05 https://github.com/solana-labs/llvm-project.git
     - run: cmake -G Ninja -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_ENABLE_TERMINFO=Off
         -DLLVM_ENABLE_LIBXML2=Off -DLLVM_ENABLE_ZLIB=Off
